@@ -1,4 +1,4 @@
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
 
 
 class Amount(object):
@@ -15,6 +15,33 @@ class Amount(object):
         assert not isinstance(currency, basestring)
         self.currency = currency
         self.value = value
+
+    @classmethod
+    def test_from_code_and_minor(cls, currency_code, value):
+        """
+        Initialises the amount with a currency code and an integer value
+        of minor units
+        """
+        from .currency import currencies
+        try:
+            return cls(currencies[currency_code.upper()], value)
+        except KeyError:
+            raise ValueError("Invalid currency code %s" % currency_code)
+
+    @classmethod
+    def test_from_code_and_major(cls, currency_code, value):
+        """
+        Initialises the amount with a currency code and a value
+        in the major unit (e.g. "1.43", Decimal("1.43"), 10)
+        """
+        from .currency import currencies
+        try:
+            currency = currencies[currency_code.upper()]
+            return cls(currency, currency.major_to_minor(Decimal(value)))
+        except KeyError:
+            raise ValueError("Invalid currency code %s" % currency_code)
+        except InvalidOperation:
+            raise ValueError("Invalid currency value %s" % value)
 
     def __str__(self):
         return unicode(self).encode("utf8")
