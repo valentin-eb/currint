@@ -17,7 +17,7 @@ class Amount(object):
         self.value = value
 
     @classmethod
-    def test_from_code_and_minor(cls, currency_code, value):
+    def from_code_and_minor(cls, currency_code, value):
         """
         Initialises the amount with a currency code and an integer value
         of minor units
@@ -29,7 +29,7 @@ class Amount(object):
             raise ValueError("Invalid currency code %s" % currency_code)
 
     @classmethod
-    def test_from_code_and_major(cls, currency_code, value):
+    def from_code_and_major(cls, currency_code, value):
         """
         Initialises the amount with a currency code and a value
         in the major unit (e.g. "1.43", Decimal("1.43"), 10)

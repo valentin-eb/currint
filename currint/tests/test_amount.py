@@ -70,36 +70,36 @@ class AmountTests(TestCase):
 
     def test_from_code_and_minor(self):
         self.assertEqual(
-            Amount.test_from_code_and_minor("GBP", 300),
+            Amount.from_code_and_minor("GBP", 300),
             Amount(currencies["GBP"], 300),
         )
         self.assertEqual(
-            Amount.test_from_code_and_minor("gbp", 300),
+            Amount.from_code_and_minor("gbp", 300),
             Amount(currencies["GBP"], 300),
         )
         with self.assertRaises(ValueError):
-            Amount.test_from_code_and_minor("WAITWHAT", 100)
+            Amount.from_code_and_minor("WAITWHAT", 100)
 
     def test_from_code_and_major(self):
         self.assertEqual(
-            Amount.test_from_code_and_major("GBP", "3.00"),
+            Amount.from_code_and_major("GBP", "3.00"),
             Amount(currencies["GBP"], 300),
         )
         self.assertEqual(
-            Amount.test_from_code_and_major("gbp", ".10"),
+            Amount.from_code_and_major("gbp", ".10"),
             Amount(currencies["GBP"], 10),
         )
         self.assertEqual(
-            Amount.test_from_code_and_major("GBP", 10),
+            Amount.from_code_and_major("GBP", 10),
             Amount(currencies["GBP"], 1000),
         )
         self.assertEqual(
-            Amount.test_from_code_and_major("GBP", Decimal("10.01")),
+            Amount.from_code_and_major("GBP", Decimal("10.01")),
             Amount(currencies["GBP"], 1001),
         )
         with self.assertRaises(ValueError):
-            Amount.test_from_code_and_major("WAITWHAT", 100)
+            Amount.from_code_and_major("WAITWHAT", 100)
         with self.assertRaises(ValueError):
-            Amount.test_from_code_and_major("GBP", "12.432")
+            Amount.from_code_and_major("GBP", "12.432")
         with self.assertRaises(ValueError):
-            Amount.test_from_code_and_major("GBP", "aaaaaaah")
+            Amount.from_code_and_major("GBP", "aaaaaaah")
