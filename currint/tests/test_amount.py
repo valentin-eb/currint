@@ -103,3 +103,17 @@ class AmountTests(TestCase):
             Amount.from_code_and_major("GBP", "12.432")
         with self.assertRaises(ValueError):
             Amount.from_code_and_major("GBP", "aaaaaaah")
+
+    def test_to_major_decimal(self):
+        self.assertEqual(
+            Amount(currencies["GBP"], 300).to_major_decimal(),
+            Decimal("3.00"),
+        )
+        self.assertEqual(
+            Amount(currencies["USD"], 3).to_major_decimal(),
+            Decimal("0.03"),
+        )
+        self.assertEqual(
+            Amount(currencies["MRO"], 7).to_major_decimal(),
+            Decimal("1.4"),  # It's written 1.2, but is 1.4 of the major unit
+        )

@@ -75,3 +75,7 @@ class Amount(object):
             self.currency,
             int(Decimal(self.value * other).to_integral(ROUND_HALF_UP)),
         )
+
+    def to_major_decimal(self):
+        "Returns our value as a Decimal of major units"
+        return self.currency.minor_to_major(self.value)
