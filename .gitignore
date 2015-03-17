@@ -1,3 +1,13 @@
+*.py[cod]
+
+# Vim
+*~
+*.swp
+*.swo
+
 *.egg-info
-dist/
-build/
+dist
+build
+.env
+.codeintel
+.coverage

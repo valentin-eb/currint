@@ -68,6 +68,9 @@ class Amount(object):
             raise ValueError("You cannot subtract amounts of different currencies (%s and %s)" % (self.currency, other.currency))
         return Amount(self.currency, self.value - other.value)
 
+    def __nonzero__(self):
+        return bool(self.value)
+
     def apply_factor(self, other):
         if not isinstance(other, (int, long, Decimal)):
             raise ValueError("You can only apply an integer, long or Decimal factor to an Amount")
