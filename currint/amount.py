@@ -53,6 +53,8 @@ class Amount(object):
         return "<Amount %s, %s>" % (self.currency, self.value)
 
     def __eq__(self, other):
+        if not isinstance(other, Amount):
+            return False
         return (self.currency == other.currency) and (self.value == other.value)
 
     def __ne__(self, other):
