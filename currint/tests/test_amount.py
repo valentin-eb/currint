@@ -21,6 +21,10 @@ class AmountTests(TestCase):
             Amount(currencies["GBP"], 132),
             Amount(currencies["GBP"], 99),
         )
+        self.assertNotEqual(
+            Amount(currencies["GBP"], 132),
+            object(),
+        )
 
     def test_add(self):
         self.assertEqual(
