@@ -32,6 +32,8 @@ class Currency(object):
                 raise ValueError("You cannot provide a value for both divisor and exponent")
 
     def __eq__(self, other):
+        if not isinstance(other, Currency):
+            return False
         return self.code == other.code
 
     def __ne__(self, other):
