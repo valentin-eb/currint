@@ -53,3 +53,17 @@ class CurrencyTests(TestCase):
             currencies["MRO"].format(7),
             "1.2 MRO",
         )
+
+    def test_equality(self):
+        self.assertEqual(
+            currencies['GBP'],
+            currencies['GBP']
+        )
+        self.assertNotEqual(
+            currencies['GBP'],
+            currencies['USD']
+        )
+        self.assertNotEqual(
+            currencies['GBP'],
+            object(),
+        )
