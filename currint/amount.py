@@ -29,7 +29,7 @@ class Amount(object):
             raise ValueError("Invalid currency code %s" % currency_code)
 
     @classmethod
-    def from_code_and_major(cls, currency_code, value):
+    def from_code_and_major(cls, currency_code, value, force_round=False):
         """
         Initialises the amount with a currency code and a value
         in the major unit (e.g. "1.43", Decimal("1.43"), 10)
@@ -37,7 +37,7 @@ class Amount(object):
         from .currency import currencies
         try:
             currency = currencies[currency_code.upper()]
-            return cls(currency, currency.major_to_minor(Decimal(value)))
+            return cls(currency, currency.major_to_minor(Decimal(value), force_round=force_round))
         except KeyError:
             raise ValueError("Invalid currency code %s" % currency_code)
         except InvalidOperation:

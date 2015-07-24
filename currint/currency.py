@@ -45,19 +45,22 @@ class Currency(object):
     def __repr__(self):
         return "<Currency %s (%s)>" % (self.code, self.name or "no name")
 
-    def major_to_minor(self, value):
+    def major_to_minor(self, value, force_round=False):
         """
         Converts an integer/long or Decimal value in major units
         (e.g. dollars not cents) into an integer value in minor units.
 
         Will error if the amount cannot be represented as an integer
-        number of minor units (e.g. $3.453)
+        number of minor units (e.g. $3.453), unless force_round
+        is passed, in which case the value will be rounded half-down.
         """
         # Don't allow imprecise types
         if not isinstance(value, (int, long, Decimal)):
             raise ValueError("The value passed in must be either an integer, a long or a decimal.")
         # Do the maths!
         minor_value = value * self.divisor
+        if force_round:
+            minor_value = int(round(minor_value))
         if (minor_value != int(minor_value)):
             raise ValueError("Cannot convert major amount %r to minor amount; would result in fractional amount of minor unit" % value)
         return int(minor_value)
