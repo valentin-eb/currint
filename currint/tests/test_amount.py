@@ -48,6 +48,10 @@ class AmountTests(TestCase):
             "$1.32",
         )
         self.assertEqual(
+            unicode(Amount(currencies["USD"], -132)),
+            "$-1.32",
+        )
+        self.assertEqual(
             unicode(Amount(currencies["GBP"], 132)),
             "£1.32",
         )
@@ -122,6 +126,10 @@ class AmountTests(TestCase):
         self.assertEqual(
             Amount(currencies["USD"], 3).to_major_decimal(),
             Decimal("0.03"),
+        )
+        self.assertEqual(
+            Amount(currencies["GBP"], -425).to_major_decimal(),
+            Decimal("-4.25"),
         )
         self.assertEqual(
             Amount(currencies["MRO"], 7).to_major_decimal(),

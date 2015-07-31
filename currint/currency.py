@@ -86,7 +86,7 @@ class Currency(object):
         with the local prefix/suffix.
         """
         major_int = int(self.minor_to_major(value))
-        minor_int = value % self.divisor
+        minor_int = abs(value) % self.divisor
         format_str = "%s%i.%0" + str(self.exponent or 0) + "i%s"
         return format_str % (self.prefix, major_int, minor_int, self.suffix)
 
