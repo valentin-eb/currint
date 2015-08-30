@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from decimal import Decimal
 from unittest import TestCase
 from ..currency import currencies
-from ..amount import Amount
+from ..amount import Amount, ZeroAmount
 
 
 class AmountTests(TestCase):
@@ -135,3 +135,46 @@ class AmountTests(TestCase):
             Amount(currencies["MRO"], 7).to_major_decimal(),
             Decimal("1.4"),  # It's written 1.2, but is 1.4 of the major unit
         )
+
+class ZeroAmountTests(TestCase):
+    def setUp(self):
+        self.zero = ZeroAmount()
+        self.nonzero = Amount(currencies["GBP"], 300)
+
+    def test_simple_addition(self):
+        amt = self.zero + self.nonzero
+        self.assertEqual(amt.currency, self.nonzero.currency)
+        self.assertEqual(amt.value, self.nonzero.value)
+
+    def test_simple_raddition(self):
+        amt = self.nonzero + self.zero
+        self.assertEqual(amt.currency, self.nonzero.currency)
+        self.assertEqual(amt.value, self.nonzero.value)
+
+    def test_sum(self):
+        amt = sum([self.nonzero], self.zero)
+        self.assertEqual(amt.currency, self.nonzero.currency)
+        self.assertEqual(amt.value, self.nonzero.value)
+
+    def test_to_major_decimal(self):
+        self.assertEqual(self.zero.to_major_decimal(), Decimal('0'))
+
+    def test_unicode(self):
+        try:
+            unicode(self.zero)
+        except:
+            self.fail("unicode(self.zero) raised an exception")
+
+    def test_repr(self):
+        try:
+            repr(self.zero)
+        except:
+            self.fail("repr(self.zero) raised an exception")
+
+    def test_forbidden_from_code_and_minor(self):
+        with self.assertRaises(NotImplementedError):
+            ZeroAmount.from_code_and_minor('USD', 100)
+
+    def test_forbidden_from_code_and_major(self):
+        with self.assertRaises(NotImplementedError):
+            ZeroAmount.from_code_and_minor('USD', Decimal('1.00'))
