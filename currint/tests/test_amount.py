@@ -136,6 +136,7 @@ class AmountTests(TestCase):
             Decimal("1.4"),  # It's written 1.2, but is 1.4 of the major unit
         )
 
+
 class ZeroAmountTests(TestCase):
     def setUp(self):
         self.nonzero = Amount(currencies["GBP"], 300)
