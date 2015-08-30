@@ -133,3 +133,6 @@ class ZeroAmount(Amount):
 
     def to_major_decimal(self):
         return Decimal(self.value)
+
+
+Amount.ZERO = ZeroAmount()

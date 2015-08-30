@@ -138,38 +138,37 @@ class AmountTests(TestCase):
 
 class ZeroAmountTests(TestCase):
     def setUp(self):
-        self.zero = ZeroAmount()
         self.nonzero = Amount(currencies["GBP"], 300)
 
     def test_simple_addition(self):
-        amt = self.zero + self.nonzero
+        amt = Amount.ZERO + self.nonzero
         self.assertEqual(amt.currency, self.nonzero.currency)
         self.assertEqual(amt.value, self.nonzero.value)
 
     def test_simple_raddition(self):
-        amt = self.nonzero + self.zero
+        amt = self.nonzero + Amount.ZERO
         self.assertEqual(amt.currency, self.nonzero.currency)
         self.assertEqual(amt.value, self.nonzero.value)
 
     def test_sum(self):
-        amt = sum([self.nonzero], self.zero)
+        amt = sum([self.nonzero], Amount.ZERO)
         self.assertEqual(amt.currency, self.nonzero.currency)
         self.assertEqual(amt.value, self.nonzero.value)
 
     def test_to_major_decimal(self):
-        self.assertEqual(self.zero.to_major_decimal(), Decimal('0'))
+        self.assertEqual(Amount.ZERO.to_major_decimal(), Decimal('0'))
 
     def test_unicode(self):
         try:
-            unicode(self.zero)
+            unicode(Amount.ZERO)
         except:
-            self.fail("unicode(self.zero) raised an exception")
+            self.fail("unicode(Amount.ZERO) raised an exception")
 
     def test_repr(self):
         try:
-            repr(self.zero)
+            repr(Amount.ZERO)
         except:
-            self.fail("repr(self.zero) raised an exception")
+            self.fail("repr(Amount.ZERO) raised an exception")
 
     def test_forbidden_from_code_and_minor(self):
         with self.assertRaises(NotImplementedError):
