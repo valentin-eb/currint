@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from decimal import Decimal
 from unittest import TestCase
 from ..currency import currencies
-from ..amount import Amount, ZeroAmount
+from ..amount import Amount, _ZeroAmount
 
 
 class AmountTests(TestCase):
@@ -140,6 +140,9 @@ class ZeroAmountTests(TestCase):
     def setUp(self):
         self.nonzero = Amount(currencies["GBP"], 300)
 
+    def test_singleton(self):
+        self.assertIs(Amount.ZERO, _ZeroAmount())
+
     def test_simple_addition(self):
         amt = Amount.ZERO + self.nonzero
         self.assertEqual(amt.currency, self.nonzero.currency)
@@ -172,8 +175,8 @@ class ZeroAmountTests(TestCase):
 
     def test_forbidden_from_code_and_minor(self):
         with self.assertRaises(NotImplementedError):
-            ZeroAmount.from_code_and_minor('USD', 100)
+            _ZeroAmount.from_code_and_minor('USD', 100)
 
     def test_forbidden_from_code_and_major(self):
         with self.assertRaises(NotImplementedError):
-            ZeroAmount.from_code_and_minor('USD', Decimal('1.00'))
+            _ZeroAmount.from_code_and_minor('USD', Decimal('1.00'))

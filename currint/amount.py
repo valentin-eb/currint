@@ -61,14 +61,14 @@ class Amount(object):
         return not (self == other)
 
     def __add__(self, other):
-        if other == ZeroAmount.instance:
+        if other == _ZeroAmount.instance:
             return Amount(self.currency, self.value)
         if self.currency != other.currency:
             raise ValueError("You cannot add amounts of different currencies (%s and %s)" % (self.currency, other.currency))
         return Amount(self.currency, self.value + other.value)
 
     def __sub__(self, other):
-        if other == ZeroAmount.instance:
+        if other == _ZeroAmount.instance:
             return Amount(self.currency, self.value)
         if self.currency != other.currency:
             raise ValueError("You cannot subtract amounts of different currencies (%s and %s)" % (self.currency, other.currency))
@@ -90,7 +90,7 @@ class Amount(object):
         return self.currency.minor_to_major(self.value)
 
 
-class ZeroAmount(Amount):
+class _ZeroAmount(Amount):
     """
     Amount singleton that doesn't have any currency.
 
@@ -100,23 +100,23 @@ class ZeroAmount(Amount):
     instance = None
 
     def __init__(self):
-        super(ZeroAmount, self).__init__(None, 0)
+        super(_ZeroAmount, self).__init__(None, 0)
 
     def __new__(cls, *args, **kwargs):
         """
-        Force a singleton instance of ZeroAmount
+        Force a singleton instance of _ZeroAmount
         """
-        if not cls.instance:
-            cls.instance = super(ZeroAmount, cls).__new__(cls)
+        if cls.instance is None:
+            cls.instance = super(_ZeroAmount, cls).__new__(cls)
         return cls.instance
 
     def __add__(self, other):
-        if other == ZeroAmount.instance:
+        if other == _ZeroAmount.instance:
             return self
         return Amount(other.currency, other.value)
 
     def __sub__(self, other):
-        if other == ZeroAmount.instance:
+        if other == _ZeroAmount.instance:
             return self
         return Amount(other.currency, other.value)
 
@@ -135,4 +135,4 @@ class ZeroAmount(Amount):
         return Decimal(self.value)
 
 
-Amount.ZERO = ZeroAmount()
+Amount.ZERO = _ZeroAmount()
