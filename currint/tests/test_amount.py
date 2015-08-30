@@ -158,6 +158,11 @@ class ZeroAmountTests(TestCase):
         self.assertEqual(amt.currency, self.nonzero.currency)
         self.assertEqual(amt.value, self.nonzero.value)
 
+    def test_sum_with_zeroes(self):
+        amt = sum([Amount.ZERO, self.nonzero, Amount.ZERO], Amount.ZERO)
+        self.assertEqual(amt.currency, self.nonzero.currency)
+        self.assertEqual(amt.value, self.nonzero.value)
+
     def test_to_major_decimal(self):
         self.assertEqual(Amount.ZERO.to_major_decimal(), Decimal('0'))
 
