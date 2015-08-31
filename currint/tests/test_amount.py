@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from decimal import Decimal
 from unittest import TestCase
 from ..currency import currencies
-from ..amount import Amount
+from ..amount import Amount, _ZeroAmount
 
 
 class AmountTests(TestCase):
@@ -135,3 +135,54 @@ class AmountTests(TestCase):
             Amount(currencies["MRO"], 7).to_major_decimal(),
             Decimal("1.4"),  # It's written 1.2, but is 1.4 of the major unit
         )
+
+
+class ZeroAmountTests(TestCase):
+    def setUp(self):
+        self.nonzero = Amount(currencies["GBP"], 300)
+
+    def test_singleton(self):
+        self.assertIs(Amount.ZERO, _ZeroAmount())
+
+    def test_simple_addition(self):
+        amt = Amount.ZERO + self.nonzero
+        self.assertEqual(amt.currency, self.nonzero.currency)
+        self.assertEqual(amt.value, self.nonzero.value)
+
+    def test_simple_raddition(self):
+        amt = self.nonzero + Amount.ZERO
+        self.assertEqual(amt.currency, self.nonzero.currency)
+        self.assertEqual(amt.value, self.nonzero.value)
+
+    def test_sum(self):
+        amt = sum([self.nonzero], Amount.ZERO)
+        self.assertEqual(amt.currency, self.nonzero.currency)
+        self.assertEqual(amt.value, self.nonzero.value)
+
+    def test_sum_with_zeroes(self):
+        amt = sum([Amount.ZERO, self.nonzero, Amount.ZERO], Amount.ZERO)
+        self.assertEqual(amt.currency, self.nonzero.currency)
+        self.assertEqual(amt.value, self.nonzero.value)
+
+    def test_to_major_decimal(self):
+        self.assertEqual(Amount.ZERO.to_major_decimal(), Decimal('0'))
+
+    def test_unicode(self):
+        try:
+            unicode(Amount.ZERO)
+        except:
+            self.fail("unicode(Amount.ZERO) raised an exception")
+
+    def test_repr(self):
+        try:
+            repr(Amount.ZERO)
+        except:
+            self.fail("repr(Amount.ZERO) raised an exception")
+
+    def test_forbidden_from_code_and_minor(self):
+        with self.assertRaises(NotImplementedError):
+            _ZeroAmount.from_code_and_minor('USD', 100)
+
+    def test_forbidden_from_code_and_major(self):
+        with self.assertRaises(NotImplementedError):
+            _ZeroAmount.from_code_and_minor('USD', Decimal('1.00'))

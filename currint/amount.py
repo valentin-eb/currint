@@ -61,11 +61,15 @@ class Amount(object):
         return not (self == other)
 
     def __add__(self, other):
+        if other == _ZeroAmount.instance:
+            return Amount(self.currency, self.value)
         if self.currency != other.currency:
             raise ValueError("You cannot add amounts of different currencies (%s and %s)" % (self.currency, other.currency))
         return Amount(self.currency, self.value + other.value)
 
     def __sub__(self, other):
+        if other == _ZeroAmount.instance:
+            return Amount(self.currency, self.value)
         if self.currency != other.currency:
             raise ValueError("You cannot subtract amounts of different currencies (%s and %s)" % (self.currency, other.currency))
         return Amount(self.currency, self.value - other.value)
@@ -84,3 +88,51 @@ class Amount(object):
     def to_major_decimal(self):
         "Returns our value as a Decimal of major units"
         return self.currency.minor_to_major(self.value)
+
+
+class _ZeroAmount(Amount):
+    """
+    Amount singleton that doesn't have any currency.
+
+    It can be used as the start of a sum() operation when you don't know the
+    currency involved (yet).
+    """
+    instance = None
+
+    def __init__(self):
+        super(_ZeroAmount, self).__init__(None, 0)
+
+    def __new__(cls, *args, **kwargs):
+        """
+        Force a singleton instance of _ZeroAmount
+        """
+        if cls.instance is None:
+            cls.instance = super(_ZeroAmount, cls).__new__(cls)
+        return cls.instance
+
+    def __add__(self, other):
+        if other == _ZeroAmount.instance:
+            return self
+        return Amount(other.currency, other.value)
+
+    def __sub__(self, other):
+        if other == _ZeroAmount.instance:
+            return self
+        return Amount(other.currency, other.value)
+
+    def __unicode__(self):
+        return unicode(self.value)
+
+    @classmethod
+    def from_code_and_minor(cls, currency_code, value):
+        raise NotImplementedError
+
+    @classmethod
+    def from_code_and_major(cls, currency_code, value):
+        raise NotImplementedError
+
+    def to_major_decimal(self):
+        return Decimal(self.value)
+
+
+Amount.ZERO = _ZeroAmount()
