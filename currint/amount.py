@@ -61,14 +61,14 @@ class Amount(object):
         return not (self == other)
 
     def __add__(self, other):
-        if other == _ZeroAmount.instance:
+        if other is _ZeroAmount.instance:
             return Amount(self.currency, self.value)
         if self.currency != other.currency:
             raise ValueError("You cannot add amounts of different currencies (%s and %s)" % (self.currency, other.currency))
         return Amount(self.currency, self.value + other.value)
 
     def __sub__(self, other):
-        if other == _ZeroAmount.instance:
+        if other is _ZeroAmount.instance:
             return Amount(self.currency, self.value)
         if self.currency != other.currency:
             raise ValueError("You cannot subtract amounts of different currencies (%s and %s)" % (self.currency, other.currency))
@@ -111,14 +111,14 @@ class _ZeroAmount(Amount):
         return cls.instance
 
     def __add__(self, other):
-        if other == _ZeroAmount.instance:
+        if other is _ZeroAmount.instance:
             return self
         return Amount(other.currency, other.value)
 
     def __sub__(self, other):
-        if other == _ZeroAmount.instance:
+        if other is _ZeroAmount.instance:
             return self
-        return Amount(other.currency, other.value)
+        return Amount(other.currency, -other.value)
 
     def __unicode__(self):
         return unicode(self.value)

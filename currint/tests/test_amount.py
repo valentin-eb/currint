@@ -159,6 +159,16 @@ class ZeroAmountTests(TestCase):
         self.assertEqual(amt.currency, self.nonzero.currency)
         self.assertEqual(amt.value, self.nonzero.value)
 
+    def test_subr(self):
+        amt = self.nonzero - Amount.ZERO
+        self.assertEqual(amt.currency, self.nonzero.currency)
+        self.assertEqual(amt.value, self.nonzero.value)
+
+    def test_subl(self):
+        amt = Amount.ZERO - self.nonzero
+        self.assertEqual(amt.currency, self.nonzero.currency)
+        self.assertEqual(amt.value, -self.nonzero.value)
+
     def test_sum_with_zeroes(self):
         amt = sum([Amount.ZERO, self.nonzero, Amount.ZERO], Amount.ZERO)
         self.assertEqual(amt.currency, self.nonzero.currency)
