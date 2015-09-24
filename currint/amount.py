@@ -1,6 +1,8 @@
 from decimal import Decimal, ROUND_HALF_UP, InvalidOperation
+from functools import total_ordering
 
 
+@total_ordering
 class Amount(object):
     """
     An amount of a currency.
@@ -55,6 +57,8 @@ class Amount(object):
     def __eq__(self, other):
         if not isinstance(other, Amount):
             return False
+        if other is _ZeroAmount.instance:
+            return other == self
         return (self.currency == other.currency) and (self.value == other.value)
 
     def __ne__(self, other):
@@ -73,6 +77,20 @@ class Amount(object):
         if self.currency != other.currency:
             raise ValueError("You cannot subtract amounts of different currencies (%s and %s)" % (self.currency, other.currency))
         return Amount(self.currency, self.value - other.value)
+
+    def __gt__(self, other):
+        if other is _ZeroAmount.instance:
+            return other > self
+        if self.currency != other.currency:
+            raise ValueError("You cannot compare amounts of different currencies (%s and %s)" % (self.currency, other.currency))
+        return self.value > other.value
+
+    def __lt__(self, other):
+        if other is _ZeroAmount.instance:
+            return other < self
+        if self.currency != other.currency:
+            raise ValueError("You cannot compare amounts of different currencies (%s and %s)" % (self.currency, other.currency))
+        return self.value < other.value
 
     def __nonzero__(self):
         return bool(self.value)
@@ -119,6 +137,15 @@ class _ZeroAmount(Amount):
         if other is _ZeroAmount.instance:
             return self
         return Amount(other.currency, -other.value)
+
+    def __eq__(self, other):
+        return self.value == other.value
+
+    def __gt__(self, other):
+        return self.value > other.value
+
+    def __lt__(self, other):
+        return self.value < other.value
 
     def __unicode__(self):
         return unicode(self.value)

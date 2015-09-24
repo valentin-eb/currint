@@ -42,6 +42,24 @@ class AmountTests(TestCase):
         with self.assertRaises(ValueError):
             Amount(currencies["GBP"], 132) - Amount(currencies["USD"], 100)
 
+    def test_comparison(self):
+        self.assertLess(
+            Amount(currencies["GBP"], 10),
+            Amount(currencies["GBP"], 20),
+        )
+        self.assertGreater(
+            Amount(currencies["GBP"], 20),
+            Amount(currencies["GBP"], 10),
+        )
+        self.assertLessEqual(
+            Amount(currencies["GBP"], 20),
+            Amount(currencies["GBP"], 20),
+        )
+        self.assertGreaterEqual(
+            Amount(currencies["GBP"], 20),
+            Amount(currencies["GBP"], 20),
+        )
+
     def test_format(self):
         self.assertEqual(
             unicode(Amount(currencies["USD"], 132)),
@@ -140,6 +158,7 @@ class AmountTests(TestCase):
 class ZeroAmountTests(TestCase):
     def setUp(self):
         self.nonzero = Amount(currencies["GBP"], 300)
+        self.negative = Amount(currencies["GBP"], -50)
 
     def test_singleton(self):
         self.assertIs(Amount.ZERO, _ZeroAmount())
@@ -173,6 +192,13 @@ class ZeroAmountTests(TestCase):
         amt = sum([Amount.ZERO, self.nonzero, Amount.ZERO], Amount.ZERO)
         self.assertEqual(amt.currency, self.nonzero.currency)
         self.assertEqual(amt.value, self.nonzero.value)
+
+    def test_comparison(self):
+        self.assertGreater(self.nonzero, Amount.ZERO)
+        self.assertLess(Amount.ZERO, self.nonzero)
+        self.assertLess(self.negative, Amount.ZERO)
+        self.assertGreater(Amount.ZERO, self.negative)
+        self.assertEqual(Amount.ZERO, Amount(currencies["GBP"], 0))
 
     def test_to_major_decimal(self):
         self.assertEqual(Amount.ZERO.to_major_decimal(), Decimal('0'))
