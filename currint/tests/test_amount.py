@@ -199,6 +199,11 @@ class ZeroAmountTests(TestCase):
         self.assertLess(self.negative, Amount.ZERO)
         self.assertGreater(Amount.ZERO, self.negative)
         self.assertEqual(Amount.ZERO, Amount(currencies["GBP"], 0))
+        self.assertEqual(Amount(currencies["GBP"], 0), Amount.ZERO)
+        self.assertGreaterEqual(Amount.ZERO, Amount(currencies["GBP"], 0))
+        self.assertGreaterEqual(Amount(currencies["GBP"], 0), Amount.ZERO)
+        self.assertLessEqual(Amount.ZERO, Amount(currencies["GBP"], 0))
+        self.assertLessEqual(Amount(currencies["GBP"], 0), Amount.ZERO)
 
     def test_to_major_decimal(self):
         self.assertEqual(Amount.ZERO.to_major_decimal(), Decimal('0'))

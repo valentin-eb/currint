@@ -78,16 +78,9 @@ class Amount(object):
             raise ValueError("You cannot subtract amounts of different currencies (%s and %s)" % (self.currency, other.currency))
         return Amount(self.currency, self.value - other.value)
 
-    def __gt__(self, other):
-        if other is _ZeroAmount.instance:
-            return other > self
-        if self.currency != other.currency:
-            raise ValueError("You cannot compare amounts of different currencies (%s and %s)" % (self.currency, other.currency))
-        return self.value > other.value
-
     def __lt__(self, other):
         if other is _ZeroAmount.instance:
-            return other < self
+            return other > self
         if self.currency != other.currency:
             raise ValueError("You cannot compare amounts of different currencies (%s and %s)" % (self.currency, other.currency))
         return self.value < other.value
@@ -140,9 +133,6 @@ class _ZeroAmount(Amount):
 
     def __eq__(self, other):
         return self.value == other.value
-
-    def __gt__(self, other):
-        return self.value > other.value
 
     def __lt__(self, other):
         return self.value < other.value
