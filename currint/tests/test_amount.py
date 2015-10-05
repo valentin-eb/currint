@@ -222,6 +222,9 @@ class ZeroAmountTests(TestCase):
         self.assertGreaterEqual(Amount(currencies["GBP"], 0), Amount.ZERO)
         self.assertLessEqual(Amount.ZERO, Amount(currencies["GBP"], 0))
         self.assertLessEqual(Amount(currencies["GBP"], 0), Amount.ZERO)
+        self.assertNotEqual(Amount(currencies["GBP"], 100), Amount.ZERO)
+        self.assertNotEqual(Amount(currencies["GBP"], 100), "foobar")
+        self.assertNotEqual(Amount.ZERO, "foobar")
 
     def test_to_major_decimal(self):
         self.assertEqual(Amount.ZERO.to_major_decimal(), Decimal('0'))

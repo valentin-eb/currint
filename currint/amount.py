@@ -146,6 +146,8 @@ class _ZeroAmount(Amount):
         return Amount(other.currency, -other.value)
 
     def __eq__(self, other):
+        if not isinstance(other, Amount):
+            return False
         return self.value == other.value
 
     def __lt__(self, other):
