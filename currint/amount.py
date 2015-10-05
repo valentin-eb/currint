@@ -85,6 +85,20 @@ class Amount(object):
             int(Decimal(self.value * other).to_integral(ROUND_HALF_UP)),
         )
 
+    def convert_currency(self, new_code, rate):
+        """
+        Converts this Amount into an Amount of another currency at the given rate
+
+        Rate is the number of new currency for each unit of the old -
+        new = old * rate. Rate can be a float or a Decimal.
+        """
+        if not isinstance(rate, (int, long, float, Decimal)):
+            raise ValueError("You can only apply an integer, long, float or Decimal factor to an Amount")
+        return Amount.from_code_and_minor(
+            new_code,
+            int(Decimal(self.value * rate).to_integral(ROUND_HALF_UP)),
+        )
+
     def to_major_decimal(self):
         "Returns our value as a Decimal of major units"
         return self.currency.minor_to_major(self.value)

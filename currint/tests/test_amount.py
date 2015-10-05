@@ -136,6 +136,24 @@ class AmountTests(TestCase):
             Decimal("1.4"),  # It's written 1.2, but is 1.4 of the major unit
         )
 
+    def test_convert_currency(self):
+        self.assertEqual(
+            Amount(currencies["GBP"], 300).convert_currency("USD", 1),
+            Amount(currencies["USD"], 300),
+        )
+        self.assertEqual(
+            Amount(currencies["GBP"], 300).convert_currency("USD", 1.5),
+            Amount(currencies["USD"], 450),
+        )
+        self.assertEqual(
+            Amount(currencies["GBP"], 300).convert_currency("CHF", 0.43215),
+            Amount(currencies["CHF"], 130),
+        )
+        self.assertEqual(
+            Amount(currencies["GBP"], 300).convert_currency("EUR", Decimal("0.91")),
+            Amount(currencies["EUR"], 273),
+        )
+
 
 class ZeroAmountTests(TestCase):
     def setUp(self):
