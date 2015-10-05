@@ -110,6 +110,18 @@ class Amount(object):
             int(Decimal(self.value * rate).to_integral(ROUND_HALF_UP)),
         )
 
+    def integral_division(self, divisor):
+        """
+        Divides the value through by the integer provided.
+        Errors if the result is not exact.
+        """
+        if not isinstance(divisor, (int, long)):
+            raise ValueError("You can only divide by an integer or a long.")
+        new_value = self.value / float(divisor)
+        if int(new_value) != new_value:
+            raise ValueError("Amount not exactly divisible by provided divisor")
+        return Amount(self.currency, int(new_value))
+
     def to_major_decimal(self):
         "Returns our value as a Decimal of major units"
         return self.currency.minor_to_major(self.value)

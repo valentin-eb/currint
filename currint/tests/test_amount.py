@@ -172,6 +172,19 @@ class AmountTests(TestCase):
             Amount(currencies["EUR"], 273),
         )
 
+    def test_integral_division(self):
+        self.assertEqual(
+            Amount(currencies["GBP"], 300).integral_division(1),
+            Amount(currencies["GBP"], 300),
+        )
+        self.assertEqual(
+            Amount(currencies["GBP"], 300).integral_division(3),
+            Amount(currencies["GBP"], 100),
+        )
+        with self.assertRaises(ValueError):
+            Amount(currencies["GBP"], 300).integral_division(2.2)
+        with self.assertRaises(ValueError):
+            Amount(currencies["GBP"], 300).integral_division(301)
 
 class ZeroAmountTests(TestCase):
     def setUp(self):
