@@ -62,7 +62,10 @@ class Currency(object):
         if force_round:
             minor_value = int(round(minor_value))
         if (minor_value != int(minor_value)):
-            raise ValueError("Cannot convert major amount %r to minor amount; would result in fractional amount of minor unit" % value)
+            raise ValueError(
+                "Cannot convert major amount %r to minor amount; would result in fractional amount of minor unit"
+                % value
+            )
         return int(minor_value)
 
     def minor_to_major(self, value):
@@ -85,11 +88,21 @@ class Currency(object):
         Formats a value (in the minor unit as an integer) as a string,
         with the local prefix/suffix.
         """
+        return "%s%s%s" % (
+            self.prefix,
+            self.format_decimal(value),
+            self.suffix,
+        )
+
+    def format_decimal(self, value):
+        """
+        Formats a value (in the minor unit as an integer) as a string,
+        with no local prefix/suffix.  Can be cast into a Decimal value as needed.
+        """
         major_int = int(self.minor_to_major(value))
         minor_int = abs(value) % self.divisor
-        format_str = "%s%i.%0" + str(self.exponent or 0) + "i%s"
-        return format_str % (self.prefix, major_int, minor_int, self.suffix)
-
+        format_str = "%i.%0" + str(self.exponent or 0) + "i"
+        return format_str % (major_int, minor_int)
 
 currencies = {
     "AED": Currency("AED", "784", 2, 'UAE Dirham'),

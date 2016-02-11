@@ -54,6 +54,21 @@ class CurrencyTests(TestCase):
             "1.2 MRO",
         )
 
+    def test_format_decimal(self):
+        self.assertEqual(
+            currencies["GBP"].format_decimal(100),
+            "1.00",
+        )
+        self.assertEqual(
+            currencies["USD"].format_decimal(43),
+            "0.43",
+        )
+        # Non-decimal currency
+        self.assertEqual(
+            currencies["MRO"].format_decimal(7),
+            "1.2",
+        )
+
     def test_equality(self):
         self.assertEqual(
             currencies['GBP'],
