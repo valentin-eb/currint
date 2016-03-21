@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from decimal import Decimal
 from unittest import TestCase
-from ..currency import currencies
+from ..currency import currencies, Currency
 from ..amount import Amount, _ZeroAmount
 
 
@@ -63,19 +63,18 @@ class AmountTests(TestCase):
     def test_format(self):
         self.assertEqual(
             unicode(Amount(currencies["USD"], 132)),
-            "$1.32",
+            "1.32 USD",
         )
         self.assertEqual(
             unicode(Amount(currencies["USD"], -132)),
-            "$-1.32",
+            "-1.32 USD",
         )
         self.assertEqual(
-            unicode(Amount(currencies["GBP"], 132)),
+            unicode(Amount(
+                Currency("GBP", "826", 2, 'Pound Sterling', prefix="£"),
+                132,
+            )),
             "£1.32",
-        )
-        self.assertEqual(
-            unicode(Amount(currencies["MRO"], 7)),
-            "1.2 MRO",
         )
 
     def test_bool(self):

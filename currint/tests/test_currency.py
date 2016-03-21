@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from decimal import Decimal
 from unittest import TestCase
-from ..currency import currencies
+from ..currency import currencies, Currency
 
 
 class CurrencyTests(TestCase):
@@ -41,12 +41,12 @@ class CurrencyTests(TestCase):
 
     def test_format(self):
         self.assertEqual(
-            currencies["GBP"].format(100),
+            Currency("GBP", "826", 2, 'Pound Sterling', prefix="£").format(100),
             "£1.00",
         )
         self.assertEqual(
             currencies["USD"].format(43),
-            "$0.43",
+            "0.43 USD",
         )
         # Non-decimal currency
         self.assertEqual(
