@@ -122,6 +122,17 @@ class Amount(object):
             raise ValueError("Amount not exactly divisible by provided divisor")
         return Amount(self.currency, int(new_value))
 
+    def divide_and_round(self, divisor, mode=ROUND_HALF_UP):
+        """
+        Divides the value through by the divisor provided.
+        Optional mode from Decimal specifies rounding behaviour.
+        """
+        if not isinstance(divisor, (int, long, float, Decimal)):
+            raise ValueError("You can only divide by an integer, long, float or Decimal")
+        return Amount(
+            self.currency, int((Decimal(self.value) / Decimal(divisor)).to_integral_exact(mode))
+        )
+
     def to_major_decimal(self):
         "Returns our value as a Decimal of major units"
         return self.currency.minor_to_major(self.value)

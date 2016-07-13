@@ -185,6 +185,24 @@ class AmountTests(TestCase):
         with self.assertRaises(ValueError):
             Amount(currencies["GBP"], 300).integral_division(301)
 
+    def test_divide_and_round(self):
+        self.assertEqual(
+            Amount(currencies["GBP"], 300).divide_and_round(1),
+            Amount(currencies["GBP"], 300),
+        )
+        self.assertEqual(
+            Amount(currencies["GBP"], 300).divide_and_round(3),
+            Amount(currencies["GBP"], 100),
+        )
+        self.assertEqual(
+            Amount(currencies["GBP"], 300).divide_and_round(4.5),
+            Amount(currencies["GBP"], 67),
+        )
+        self.assertEqual(
+            Amount(currencies["GBP"], 1).divide_and_round(2),
+            Amount(currencies["GBP"], 1),
+        )
+
 class ZeroAmountTests(TestCase):
     def setUp(self):
         self.nonzero = Amount(currencies["GBP"], 300)
