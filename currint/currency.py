@@ -1,8 +1,10 @@
 # encoding: utf8
 from __future__ import unicode_literals
+import six
 from decimal import Decimal
 
 
+@six.python_2_unicode_compatible
 class Currency(object):
     """
     Represents a currency (unit of account).
@@ -55,7 +57,7 @@ class Currency(object):
         is passed, in which case the value will be rounded half-down.
         """
         # Don't allow imprecise types
-        if not isinstance(value, (int, long, Decimal)):
+        if not isinstance(value, six.integer_types + (Decimal, )):
             raise ValueError("The value passed in must be either an integer, a long or a decimal.")
         # Do the maths!
         minor_value = value * self.divisor
@@ -78,7 +80,7 @@ class Currency(object):
         """
 
         # Don't allow imprecise types
-        if not isinstance(value, (int, long)):
+        if not isinstance(value, six.integer_types):
             raise ValueError("The value passed in must be either an integer or a long")
         # Simple maths really.
         return Decimal(value) / self.divisor
@@ -103,6 +105,7 @@ class Currency(object):
         minor_int = abs(value) % self.divisor
         format_str = "%i.%0" + str(self.exponent or 0) + "i"
         return format_str % (major_int, minor_int)
+
 
 currencies = {
     "AED": Currency("AED", "784", 2, 'UAE Dirham'),

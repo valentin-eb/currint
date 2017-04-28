@@ -1,5 +1,6 @@
 # encoding: utf8
 from __future__ import unicode_literals
+import six
 from decimal import Decimal
 from unittest import TestCase
 from ..currency import currencies, Currency
@@ -62,15 +63,15 @@ class AmountTests(TestCase):
 
     def test_format(self):
         self.assertEqual(
-            unicode(Amount(currencies["USD"], 132)),
+            six.text_type(Amount(currencies["USD"], 132)),
             "1.32 USD",
         )
         self.assertEqual(
-            unicode(Amount(currencies["USD"], -132)),
+            six.text_type(Amount(currencies["USD"], -132)),
             "-1.32 USD",
         )
         self.assertEqual(
-            unicode(Amount(
+            six.text_type(Amount(
                 Currency("GBP", "826", 2, 'Pound Sterling', prefix="£"),
                 132,
             )),
@@ -259,11 +260,11 @@ class ZeroAmountTests(TestCase):
     def test_to_major_decimal(self):
         self.assertEqual(Amount.ZERO.to_major_decimal(), Decimal('0'))
 
-    def test_unicode(self):
+    def test_str(self):
         try:
-            unicode(Amount.ZERO)
+            six.text_type(Amount.ZERO)
         except:
-            self.fail("unicode(Amount.ZERO) raised an exception")
+            self.fail("str(Amount.ZERO) raised an exception")
 
     def test_repr(self):
         try:
