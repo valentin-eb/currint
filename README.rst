@@ -28,9 +28,16 @@ Or using ``currint.Amount.from_value_and_minor`` if you already have minor value
 You can then perform safe mathematics::
 
     amount.apply_factor(2)
-    amount.divde_and_round(1.34)
+    amount.divide_and_round(1.34)
 
 And output as decimals of major units if needed::
 
     >> amount.to_major_decimal()
     "42.23"
+
+Or directly use the minor values:
+
+    >> amount.value
+    4223
+    >> amount.currency.code
+    "GBP"
