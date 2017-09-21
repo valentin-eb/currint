@@ -35,7 +35,7 @@ And output as decimals of major units if needed::
     >> amount.to_major_decimal()
     "42.23"
 
-Or directly use the minor values:
+Or directly use the minor values::
 
     >> amount.value
     4223
