@@ -35,8 +35,8 @@ class CurrencyTests(TestCase):
         )
         # Non-decimal currency
         self.assertEqual(
-            currencies["MRO"].minor_to_major(25),
-            Decimal("5"),
+            currencies["MRO"].minor_to_major(26),
+            Decimal("5.2"),
         )
 
     def test_format(self):
@@ -51,7 +51,18 @@ class CurrencyTests(TestCase):
         # Non-decimal currency
         self.assertEqual(
             currencies["MRO"].format(7),
-            "1.2 MRO",
+            "1.4 MRO",
+        )
+        # Negative value less than 0 and greater than -1 major unit
+        self.assertEqual(
+            currencies["USD"].format(-60),
+            "-0.60 USD",
+        )
+
+        # 0 exponent currency
+        self.assertEqual(
+            currencies["JPY"].format(100),
+            "100 JPY",
         )
 
     def test_format_decimal(self):
@@ -66,7 +77,19 @@ class CurrencyTests(TestCase):
         # Non-decimal currency
         self.assertEqual(
             currencies["MRO"].format_decimal(7),
-            "1.2",
+            "1.4",
+        )
+
+        # Negative value less than 0 and greater than -1 major unit
+        self.assertEqual(
+            currencies["USD"].format_decimal(-60),
+            "-0.60",
+        )
+
+        # 0 exponent currency
+        self.assertEqual(
+            currencies["JPY"].format_decimal(100),
+            "100",
         )
 
     def test_equality(self):

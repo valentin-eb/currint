@@ -101,10 +101,17 @@ class Currency(object):
         Formats a value (in the minor unit as an integer) as a string,
         with no local prefix/suffix.  Can be cast into a Decimal value as needed.
         """
-        major_int = int(self.minor_to_major(value))
-        minor_int = abs(value) % self.divisor
-        format_str = "%i.%0" + str(self.exponent or 0) + "i"
-        return format_str % (major_int, minor_int)
+        major_value = self.minor_to_major(value)
+
+        if self.exponent is not None:
+            format_str = "{:.{precision}f}"
+            format_kwargs = dict(precision=self.exponent)
+        else:
+            # A custom `divisor` can produce arbitrary precision major representations (think divisor=13)
+            format_str = "{:f}"
+            format_kwargs = {}
+
+        return format_str.format(major_value, **format_kwargs)
 
 
 currencies = {
