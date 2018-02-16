@@ -80,8 +80,10 @@ class AmountTests(TestCase):
 
     def test_bool(self):
         self.assertTrue(Amount(currencies["USD"], 1))
+        self.assertTrue(Amount(currencies["USD"], -1))
         self.assertFalse(Amount(currencies["USD"], 0))
         self.assertTrue(Amount.from_code_and_major("USD", Decimal('0.01')))
+        self.assertTrue(Amount.from_code_and_major("USD", Decimal('-0.01')))
         self.assertFalse(Amount.from_code_and_major("USD", Decimal('0.00')))
 
     def test_apply_factor(self):
