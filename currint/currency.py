@@ -227,7 +227,7 @@ currencies = {
     "NZD": Currency("NZD", "554", 2, 'New Zealand Dollar'),
     "OMR": Currency("OMR", "512", 3, 'Rial Omani'),
     "PAB": Currency("PAB", "590", 2, 'Balboa'),
-    "PEN": Currency("PEN", "604", 2, 'Nuevo Sol'),
+    "PEN": Currency("PEN", "604", 2, 'Sol'),
     "PGK": Currency("PGK", "598", 2, 'Kina'),
     "PHP": Currency("PHP", "608", 2, 'Philippine Peso'),
     "PKR": Currency("PKR", "586", 2, 'Pakistan Rupee'),
