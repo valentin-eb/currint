@@ -70,6 +70,9 @@ class Amount(object):
             raise ValueError("You cannot add amounts of different currencies (%s and %s)" % (self.currency, other.currency))
         return Amount(self.currency, self.value + other.value)
 
+    def __radd__(self, other):
+        return Amount(self.currency, self.value + other)
+
     def __sub__(self, other):
         if other is _ZeroAmount.instance:
             return Amount(self.currency, self.value)
